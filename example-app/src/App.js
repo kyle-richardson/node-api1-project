@@ -46,7 +46,8 @@ function App() {
               padding: '10px', 
               marginBottom: '10px', 
               color: 'white', 
-              cursor: 'pointer'
+              cursor: 'pointer',
+              textAlign: 'center'
             }} onClick={()=>{
               axios.delete(`http://localhost:8000/api/users/${user.id}`)
                 .then(res=> {
@@ -59,7 +60,8 @@ function App() {
               background: 'lightblue', 
               padding: '10px', 
               marginBottom: '10px', 
-              cursor: 'pointer'
+              cursor: 'pointer',
+              textAlign: 'center'
             }} onClick={()=>{
               axios.put(`http://localhost:8000/api/users/${user.id}`, { name: 'edited test', bio: 'edited bio'})
               .then(res=> {
@@ -76,7 +78,8 @@ function App() {
         background: 'lightgreen', 
         padding: '10px', 
         marginBottom: '10px', 
-        cursor: 'pointer'
+        cursor: 'pointer',
+        textAlign: 'center'
       }} onClick={()=> {
         axios.post(`http://localhost:8000/api/users`, user)
         .then(res=> {

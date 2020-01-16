@@ -12,20 +12,27 @@ server.get('/', (req, res) => {
 
 //endpoint works
 server.post('/api/users', (req, res) => {
-    const user = req.body
-    db.insert(user)
+    const newUser = req.body
+    if(!newUser.name || !newUser.bio) {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    }
+    else {
+        db.insert(newUser)
         .then(promise=>{
-            res.status(201).json(user)
-        })
-        .catch(err=>{
-            if(!user.name || !user.bio) {
-                res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
-            }
-            else {
-                res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
-            }
+            db.findById(promise.id)
+                .then(user => {
+                    res.status(201).json(user)
+                })
+                .catch(err=> {
+                    res.status(501).json({ errorMessage: "New data inserted, but failed to retrieve immediately afterwards" })
+                })
             
         })
+        .catch(err=>{
+            res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
+        })
+    }
+    
 
 })
 

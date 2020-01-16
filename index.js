@@ -18,19 +18,19 @@ server.post('/api/users', (req, res) => {
     }
     else {
         db.insert(newUser)
-        .then(promise=>{
-            db.findById(promise.id)
-                .then(user => {
-                    res.status(201).json(user)
-                })
-                .catch(err=> {
-                    res.status(501).json({ errorMessage: "New data inserted, but failed to retrieve immediately afterwards" })
-                })
-            
-        })
-        .catch(err=>{
-            res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
-        })
+            .then(promise=>{
+                db.findById(promise.id)
+                    .then(user => {
+                        res.status(201).json(user)
+                    })
+                    .catch(err=> {
+                        res.status(501).json({ errorMessage: "New data inserted, but failed to retrieve immediately afterwards" })
+                    })
+                
+            })
+            .catch(err=>{
+                res.status(500).json({ errorMessage: "There was an error while saving the user to the database" })
+            })
     }
     
 
@@ -93,6 +93,7 @@ server.get('/api/users/:id', (req, res) => {
 
     } */
 server.delete('/api/users/:id', (req, res) => {
+    const { id } = req.params;
     db.findById(id)
         .then(ele => {
             if(!!ele){
@@ -127,19 +128,19 @@ server.put('/api/users/:id', (req, res) => {
             oldUser=user
             if(!!user) {
                 db.update(id, changes)
-                        .then(promise => {
-                            db.findById(id)
-                                .then(ele => {
-                                    res.status(200).json(ele)
-                                })
-                                .catch(err=> {
-                                    res.status(504).json( { message: 'User updated, but failed to retrieve updated info'})
-                                })
-                            
-                        })
-                        .catch(err => {
-                            res.status(500).json({ errorMessage: "The user information could not be modified." })
-                        })
+                    .then(promise => {
+                        db.findById(id)
+                            .then(ele => {
+                                res.status(200).json(ele)
+                            })
+                            .catch(err=> {
+                                res.status(504).json( { message: 'User updated, but failed to retrieve updated info'})
+                            })
+                        
+                    })
+                    .catch(err => {
+                        res.status(500).json({ errorMessage: "The user information could not be modified." })
+                    })
                     
             }
             else {

@@ -66,7 +66,6 @@ server.delete('/api/users/:id', (req, res) => {
             if(!!ele){
                 db.remove(id)
                     .then(promise=>{
-                        console.log(promise)
                         if(promise===1) {
                             res.status(200).json(ele)
                         }
@@ -88,14 +87,14 @@ server.delete('/api/users/:id', (req, res) => {
 server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
     var changes = req.body
-    db.findById(id)
+    if(!changes.name || !changes.bio) {
+        res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
+    }
+    else db.findById(id)
         .then(user => {
             oldUser=user
             if(!!user) {
-                if(!user.name || !user.bio) {
-                    res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
-                }
-                else db.update(id, changes)
+                db.update(id, changes)
                         .then(promise => {
                             db.findById(id)
                                 .then(ele => {

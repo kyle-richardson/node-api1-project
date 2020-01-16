@@ -58,9 +58,34 @@ server.get('/api/users/:id', (req, res) => {
         })
 });
 
-//endpoint works
-server.delete('/api/users/:id', (req, res) => {
+/* server.delete('/api/users/:id', async (req, res) => {
     const { id } = req.params;
+    //async await method of resolving promise to grab user object
+    var userAsync = {}
+    try {
+        userAsync = await db.findById(id)
+    } catch(err) {
+        res.status(500).json({ errorMessage: "The user information could not be retrieved." })
+    }
+    console.log(userAsync)
+
+    //.then method of resolving promise to grab user object
+    var userThen = {}
+    db.findById(id)
+        .then(res => {
+            userThen=res
+        })
+        .then(()=> {
+            console.log(userThen)
+        })
+        .catch(err=>{
+            res.status(500).json({ errorMessage: "The user information could not be retrieved." })
+        })
+
+    //...more code for db.remove to remove user
+
+    } */
+server.delete('/api/users/:id', (req, res) => {
     db.findById(id)
         .then(ele => {
             if(!!ele){

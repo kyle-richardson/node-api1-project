@@ -4,10 +4,7 @@ import './App.css';
 import axios from "axios"
 
 function App() {
-  const [list, setList] = useState([{
-    name: 'wow',
-    bio: 'test'
-  }])
+  const [list, setList] = useState([])
   const [user, setUser] = useState({
     name: 'kyle',
     bio: 'loving lambda'
@@ -24,27 +21,25 @@ function App() {
   }, [update])
 
   return (
-    <div className="App">
+    <div className="App" style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
       {list.map(user => {
         return (
-          <div>
+          <div key={user.id} style={{border: '1px solid blue', borderRadius: '4px', padding: '20px', marginBottom: '10px', textAlign: 'left'}}>
             <p>ID: {user.id}</p>
             <p>Name: {user.name}</p>
             <p>Bio: {user.bio}</p>
             <p>Created on: {user.created_at}</p>
             <p>Last updated: {user.updated_at}</p>
-            <div onClick={()=>{
+            <div style={{borderRadius: '4px', background: 'red', padding: '10px', marginBottom: '10px', color: 'white'}} onClick={()=>{
               axios.delete(`http://localhost:8000/api/users/${user.id}`)
                 .then(res=> {
-                  console.log(res)
                   setUpdate(!update)
                 })
                 .catch(err => console.log(err))
             }}>Delete User</div>
-            <div onClick={()=>{
-              axios.delete(`http://localhost:8000/api/users/${user.id}`, { name: 'edited test', bio: 'edited bio'})
+            <div style={{borderRadius: '4px', background: 'lightblue', padding: '10px', marginBottom: '10px'}} onClick={()=>{
+              axios.put(`http://localhost:8000/api/users/${user.id}`, { name: 'edited test', bio: 'edited bio'})
               .then(res=> {
-                console.log(res)
                 setUpdate(!update)
               })
                 .catch(err => console.log(err))
@@ -53,10 +48,9 @@ function App() {
           </div>
         )
       })}
-      <div onClick={()=> {
-        axios.post(`http://localhost:8000/api/users`, { name: 'test', bio: 'test bio'})
+      <div style={{borderRadius: '4px', background: 'lightgreen', padding: '10px', marginBottom: '10px'}} onClick={()=> {
+        axios.post(`http://localhost:8000/api/users`, user)
         .then(res=> {
-          console.log(res)
           setUpdate(!update)
         })
           .catch(err=> console.log(err))

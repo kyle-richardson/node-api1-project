@@ -87,7 +87,7 @@ server.delete('/api/users/:id', (req, res) => {
 //endpoint works
 server.put('/api/users/:id', (req, res) => {
     const { id } = req.params;
-    var newUser = req.body
+    var changes = req.body
     db.findById(id)
         .then(user => {
             oldUser=user
@@ -95,9 +95,16 @@ server.put('/api/users/:id', (req, res) => {
                 if(!user.name || !user.bio) {
                     res.status(400).json({ errorMessage: "Please provide name and bio for the user." })
                 }
-                else db.update(id, newUser)
+                else db.update(id, changes)
                         .then(promise => {
-                            res.status(200).json(newUser)
+                            db.findById(id)
+                                .then(ele => {
+                                    res.status(200).json(ele)
+                                })
+                                .catch(err=> {
+                                    res.status(504).json( { message: 'User updated, but failed to retrieve updated info'})
+                                })
+                            
                         })
                         .catch(err => {
                             res.status(500).json({ errorMessage: "The user information could not be modified." })
